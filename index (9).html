@@ -1,0 +1,771 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nos tables</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<style>
+:root{--bg:#f6f1e9;--paper:#fffdf8;--ink:#2a1c1e;--muted:#80706b;--line:#e7ddd0;--soft:#f2e9dd;--wine:#7a1f3d;--wine-ink:#fff;--accent:#b5863a;--ok:#3d7a4c;--warn:#c47a17;--bad:#a63b3b;--idle:#8b8682;--shadow:0 1px 2px rgba(70,30,30,.05),0 6px 20px rgba(70,30,30,.06);--r:14px;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#171213;--paper:#211a1b;--ink:#f0e7e1;--muted:#a3948d;--line:#372c2d;--soft:#2b2223;--wine:#d0667f;--wine-ink:#1a1011;--accent:#d7a85a;--ok:#6fb07f;--warn:#e0a24a;--bad:#e07a7a;--idle:#9a948f;--shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.25);color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#171213;--paper:#211a1b;--ink:#f0e7e1;--muted:#a3948d;--line:#372c2d;--soft:#2b2223;--wine:#d0667f;--wine-ink:#1a1011;--accent:#d7a85a;--ok:#6fb07f;--warn:#e0a24a;--bad:#e07a7a;--idle:#9a948f;--shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.25);color-scheme:dark}
+*{box-sizing:border-box}
+html,body{background:var(--bg)}
+body{margin:0;color:var(--ink);font:15px/1.5 Inter,system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px}
+.top{display:flex;align-items:center;gap:12px;padding:22px 0 12px}
+.logo{width:44px;height:44px;border-radius:50%;background:var(--wine);display:grid;place-items:center;flex:none}
+.logo svg{width:22px;height:22px;stroke:var(--wine-ink)}
+.brand{min-width:0}
+.wordmark{height:54px;width:auto;display:block;color:var(--ink);margin-left:-4px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.mq{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.brand h1{font:600 30px/1.05 'Cormorant Garamond',Georgia,serif;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand p{margin:0;color:var(--muted);font-size:13px}
+.sp{flex:1}
+nav.tabs{display:flex;gap:2px;overflow-x:auto;border-bottom:1px solid var(--line);scrollbar-width:none}
+nav.tabs::-webkit-scrollbar{display:none}
+nav.tabs button,.subtabs button{background:none;border:0;padding:10px 14px;font:500 14px Inter,system-ui,sans-serif;color:var(--muted);border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
+nav.tabs button.on,.subtabs button.on{color:var(--wine);border-color:var(--wine)}
+.badge-n:not(:empty){background:var(--wine);color:var(--wine-ink);font-size:11px;font-weight:600;border-radius:999px;padding:1px 7px}
+.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:8px 14px;border-radius:999px;font:500 14px Inter,system-ui,sans-serif;cursor:pointer;white-space:nowrap;text-decoration:none}
+.btn:hover{border-color:color-mix(in srgb,var(--wine) 45%,var(--line))}
+.btn.primary{background:var(--wine);border-color:var(--wine);color:var(--wine-ink)}
+.btn.ghost{background:transparent;border-color:transparent}
+.btn.danger{color:var(--bad)}
+.btn.sm{padding:5px 10px;font-size:13px}
+.btn:disabled{opacity:.6;cursor:default}
+.icon-btn{width:38px;height:38px;padding:0;justify-content:center;font-weight:700;letter-spacing:1px}
+.pub.dirty::after{content:'';width:7px;height:7px;border-radius:50%;background:var(--accent)}
+.menu-wrap{position:relative}
+.menu{position:absolute;right:0;top:46px;background:var(--paper);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);padding:6px;min-width:230px;z-index:1000}
+.menu button{display:block;width:100%;text-align:left;background:none;border:0;padding:9px 12px;border-radius:8px;font:inherit;color:inherit;cursor:pointer}
+.menu button:hover{background:var(--soft)}
+.menu hr{border:0;border-top:1px solid var(--line);margin:4px 0}
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:16px 0}
+input,select,textarea{font:inherit;color:inherit;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:8px 10px;min-width:0;width:100%}
+.toolbar input,.toolbar select{width:auto}
+textarea{resize:vertical;min-height:80px}
+input:focus,select:focus,textarea:focus{outline:2px solid color-mix(in srgb,var(--wine) 30%,transparent);border-color:var(--wine)}
+input[type=checkbox]{width:auto;accent-color:var(--wine)}
+.search{flex:1 1 220px}
+.count{font-size:13px;margin:0 0 10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;padding-bottom:48px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:16px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:9px}
+.card.click{cursor:pointer;transition:transform .15s,border-color .15s}
+.card.click:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--wine) 40%,var(--line))}
+.card h3{margin:0;font:600 22px/1.15 'Cormorant Garamond',Georgia,serif}
+.c-top{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.c-meta{color:var(--muted);font-size:13px}
+.dist{color:var(--accent);font-weight:600}
+.c-wines{display:flex;flex-wrap:wrap;gap:6px}
+.wchip{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;background:var(--soft);border-radius:999px;padding:3px 10px}
+.dot{width:9px;height:9px;border-radius:50%;flex:none;display:inline-block;box-shadow:inset 0 0 0 1px rgba(0,0,0,.18)}
+.c-foot{display:flex;justify-content:space-between;gap:8px;font-size:12.5px;color:var(--muted);border-top:1px dashed var(--line);padding-top:9px;margin-top:auto}
+.chip{font-size:11.5px;font-weight:600;padding:3px 9px;border-radius:999px;white-space:nowrap;background:color-mix(in srgb,var(--c) 15%,transparent);color:var(--c)}
+.muted{color:var(--muted)}.small{font-size:13px}
+.num{text-align:right;font-variant-numeric:tabular-nums}
+.empty{text-align:center;padding:56px 20px;color:var(--muted)}
+.empty.small{padding:24px}
+.banner{background:color-mix(in srgb,var(--accent) 13%,var(--paper));border:1px solid color-mix(in srgb,var(--accent) 35%,var(--line));border-radius:12px;padding:10px 14px;font-size:13.5px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:16px}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:12.5px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:5px}
+#map{height:calc(100vh - 240px);min-height:380px;border-radius:var(--r);border:1px solid var(--line);margin-bottom:40px;z-index:0}
+.leaflet-popup-content{font:13px/1.45 Inter,system-ui,sans-serif}
+.leaflet-popup-content b{font-size:14px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:12px;margin:16px 0}
+.kpi{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px}
+.kpi b{display:block;font:600 32px/1.1 'Cormorant Garamond',Georgia,serif;color:var(--wine)}
+.kpi span{font-size:12.5px;color:var(--muted)}
+.panels{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:14px;padding-bottom:48px}
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px}
+.panel h4{margin:0 0 12px;font:600 19px 'Cormorant Garamond',Georgia,serif}
+.bar-row{display:grid;grid-template-columns:minmax(90px,40%) 1fr auto;gap:10px;align-items:center;font-size:13px;margin:7px 0}
+.bl{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:flex;align-items:center;gap:6px}
+.bt{height:10px;background:var(--soft);border-radius:6px;overflow:hidden}
+.bt i{display:block;height:100%;background:var(--wine);border-radius:6px}
+.bv{font-variant-numeric:tabular-nums;color:var(--muted);min-width:34px;text-align:right}
+.cols{display:flex;align-items:stretch;gap:5px;height:160px}
+.col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:4px;font-size:10.5px;color:var(--muted);min-width:0}
+.col i{width:100%;background:var(--wine);border-radius:5px 5px 2px 2px;min-height:2px;opacity:.9}
+.col em{font-style:normal;color:var(--ink);font-size:11px}
+.w-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;text-align:center;background:var(--soft);border-radius:10px;padding:10px 4px}
+.w-stats b{display:block;font:600 20px 'Cormorant Garamond',Georgia,serif}
+.w-stats span{font-size:11px;color:var(--muted)}
+.links{display:flex;flex-wrap:wrap;gap:6px}
+.links a{font-size:12.5px;color:var(--wine);text-decoration:none;background:color-mix(in srgb,var(--wine) 8%,transparent);padding:2px 9px;border-radius:999px}
+.archived{opacity:.55}
+.list-row{display:flex;gap:12px;align-items:center;padding:12px 14px;background:var(--paper);border:1px solid var(--line);border-radius:12px;margin-bottom:8px;cursor:pointer}
+.list-row:hover{border-color:color-mix(in srgb,var(--wine) 40%,var(--line))}
+.chev{color:var(--muted);font-size:20px}
+h3.sec{font:600 21px 'Cormorant Garamond',Georgia,serif;margin:22px 0 10px}
+h3.sec small{font:400 13px Inter,system-ui,sans-serif;color:var(--muted);margin-left:6px}
+dialog{border:0;padding:0;border-radius:18px;background:var(--paper);color:var(--ink);width:min(720px,calc(100vw - 32px));max-height:calc(100vh - 40px);box-shadow:0 20px 60px rgba(0,0,0,.3)}
+dialog::backdrop{background:rgba(30,15,18,.45)}
+.m{display:flex;flex-direction:column;max-height:calc(100vh - 40px)}
+.m-head{display:flex;align-items:center;gap:10px;padding:18px 20px 8px}
+.m-head h2{margin:0;font:600 25px/1.1 'Cormorant Garamond',Georgia,serif;flex:1;min-width:0}
+.subtabs{display:flex;gap:2px;padding:0 12px;border-bottom:1px solid var(--line);overflow-x:auto;flex:none}
+.m-body{padding:18px 20px;overflow:auto;flex:1}
+.m-foot{display:flex;gap:8px;padding:12px 20px;border-top:1px solid var(--line);align-items:center;flex:none}
+.form{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form label{display:flex;flex-direction:column;gap:4px;font-size:12.5px;color:var(--muted);font-weight:500}
+.form .full{grid-column:1/-1}
+.form h5{grid-column:1/-1;margin:8px 0 -4px;font:600 13px Inter,system-ui,sans-serif;color:var(--ink)}
+label.chk{flex-direction:row!important;align-items:center;gap:6px!important;font-size:13px;color:var(--ink)!important;white-space:nowrap}
+.rows .row{display:grid;grid-template-columns:1fr 120px auto auto;gap:8px;align-items:center;margin-bottom:8px}
+.rows .hdr{font-size:12px;color:var(--muted);margin-bottom:4px}
+.addrow{display:grid;grid-template-columns:140px 1fr 100px;gap:8px;margin-bottom:14px}
+.addrow .full{grid-column:1/-1;display:flex;gap:8px}
+table.t{width:100%;border-collapse:collapse;font-size:14px}
+.t td,.t th{padding:8px 6px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+.t th{font-size:12px;color:var(--muted);font-weight:500}
+.jr{border-left:3px solid var(--line);padding:4px 0 4px 12px;margin:10px 0;display:flex;gap:8px}
+.jr div{flex:1;white-space:pre-wrap}
+.jr time{display:block;font-size:12px;color:var(--muted)}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-size:14px;opacity:0;transition:.25s;pointer-events:none;z-index:9999;max-width:calc(100vw - 32px);text-align:center}
+.toast.on{opacity:1;transform:translateX(-50%)}
+@media(max-width:640px){
+ .form{grid-template-columns:1fr}
+ .brand h1{font-size:24px}.brand p{display:none}
+ .wordmark{height:40px}
+ dialog{width:100vw;max-width:100vw;height:100dvh;max-height:100dvh;border-radius:0}
+ .m{max-height:100dvh;height:100%}
+ .rows .row{grid-template-columns:1fr 84px auto auto}
+ .addrow{grid-template-columns:1fr 90px}
+ .addrow select{grid-column:1/-1;order:-1}
+ .toolbar select{flex:1 1 140px}
+ .grid{grid-template-columns:1fr}
+ .w-stats{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+ <header class="top">
+  <div class="brand"><svg class="wordmark" viewBox="26 20 245 60" fill="currentColor" role="img" aria-label="Sainte Joie — Maison Meyer"><g> <g> <path d="M267.19,24.84c0,0.53-0.42,1.37-1.53,1.37h-69.14h-10.88h-1.6V27h1.6v0h0.07c0.01,0,0.03,0,0.04,0h1.16 c0.85,0.03,1.72,0.15,2.26,0.69c0.36,0.35,0.53,0.85,0.53,1.5v16.06c0,5.23-1.98,8.11-5.59,8.11h-0.07v0.79h0.07 c5.59,0,8.67-3.39,8.67-9.55v-15.4c0-0.66,0.17-1.15,0.53-1.5c0.54-0.53,1.41-0.66,2.26-0.69l14.28,0 c-5.9,2.05-9.98,7.67-9.98,13.83c0,7.93,6.7,14.62,14.62,14.62c7.92,0,14.62-6.7,14.62-14.62c0-6.16-4.08-11.79-9.98-13.83h15.58 c1.47,0,2.98,0.3,2.98,2.19v21.97c0,1.89-1.5,2.17-2.97,2.19h-0.62h-4.14v0.79h35.71c1.12,0,1.53,0.84,1.53,1.37v0.07h0.79v-7.92 h-0.79v0.07c0,2.41-0.5,5.62-4.8,5.62h-8.79V40.57h3.36c2.06,0,4.8,0.58,4.8,5.62v0.07h0.79V34.09h-0.79v0.07 c0,2.41-0.5,5.62-4.8,5.62h-3.36V27h8.79c2.06,0,4.8,0.58,4.8,5.62v0.07h0.79v-7.92h-0.79V24.84z M225.36,40.83 c0,7.75-4.78,13.83-10.89,13.83c-6.1,0-10.89-6.07-10.89-13.83c0-7.75,4.78-13.83,10.89-13.83 C220.58,27,225.36,33.07,225.36,40.83z M250.51,51.16c0,1.89-1.5,2.17-2.97,2.19h-3.82c-1.47-0.02-2.97-0.3-2.97-2.19V29.18 c0-1.89,1.51-2.17,2.98-2.19h3.8c1.47,0.02,2.98,0.3,2.98,2.19V51.16z"></path> </g> <g> <path d="M40.25,54.79c4.51,0,9.36-2.5,9.36-7.98c0-4.54-4.13-6.78-8.12-8.94c-3.59-1.95-6.99-3.79-6.99-7.14 c0-3.02,2.76-4.38,5.49-4.38c0.77,0,3.39,0.14,4.75,1.93c0.88,1.17,1.05,2.79,0.48,4.82l-0.02,0.06l0.75,0.24l1.75-6.12l0.02-0.07 l-0.07-0.02c-0.3-0.09-0.63-0.19-0.99-0.29c-1.87-0.57-4.44-1.34-6.68-1.34c-2.18,0-4.24,0.67-5.79,1.89 c-1.65,1.3-2.56,3.12-2.56,5.14c0,4.16,3.96,6.27,7.79,8.31c3.65,1.94,7.09,3.78,7.09,7.22c0,3.46-2.58,5.88-6.27,5.88 c-1.87,0-7.98-0.7-7.98-9.71v-0.07h-0.79v7.3l0.03,0.02C31.55,51.57,35.6,54.79,40.25,54.79z"></path> <path d="M170.3,32.69v-7.92h-0.79v0.07c0,0.53-0.42,1.37-1.53,1.37h-46.08c-1.12,0-1.53-0.84-1.53-1.37v-0.07h-0.79 V49.2l-18.65-22.97l-0.02-0.03H58V27h0.07c0.13,0,0.28,0,0.43,0c1.32-0.02,3.12-0.04,4.11,1.19l-8.72,23.15 c-0.33,0.91-0.98,1.5-1.98,1.79c-0.86,0.25-1.82,0.24-2.6,0.23c-0.15,0-0.29,0-0.43,0h-0.07v0.79h60.86v-0.79h-7.23 c-1,0.02-2.38,0.05-3.12-0.67c-0.36-0.35-0.54-0.86-0.54-1.52V28.5l20.81,25.62l0.02,0.03h0.76V32.62c0-2.38,0.49-5.56,4.7-5.62 c0.02,0,0.04,0,0.05,0c0.02,0,0.03,0,0.05,0h10.99v24.16c0,0.66-0.17,1.15-0.53,1.5c-0.72,0.71-2.03,0.7-3.09,0.69 c-0.13,0-0.25,0-0.36,0h-0.07v0.79h11.19v-0.79h-0.07c-0.12,0-0.24,0-0.36,0c-1.06,0.01-2.37,0.03-3.09-0.69 c-0.36-0.35-0.53-0.85-0.53-1.5V27h13.6v24.16c0,0.66-0.17,1.15-0.53,1.5c-0.72,0.71-2.03,0.7-3.09,0.69c-0.13,0-0.25,0-0.36,0 h-0.07v0.79h19.2c1.12,0,1.53,0.84,1.53,1.37v0.07h0.79v-7.92h-0.79v0.07c0,2.41-0.5,5.62-4.8,5.62h-8.79V40.57h3.36 c2.06,0,4.8,0.58,4.8,5.62v0.07h0.79V34.09h-0.79v0.07c0,2.41-0.5,5.62-4.8,5.62h-3.36V27h8.79c2.06,0,4.8,0.58,4.8,5.62v0.07 H170.3z M63.1,29.09l6.31,16.73H56.79L63.1,29.09z M71.52,52.79c-0.42,0.59-1.55,0.57-2.56,0.56c-0.15,0-0.29,0-0.43,0H57.35 l-0.05,0c-0.97,0.02-2.17,0.05-2.6-0.55c-0.23-0.31-0.22-0.79,0-1.42l1.78-4.76h13.25l1.78,4.76 C71.74,52.01,71.74,52.48,71.52,52.79z M85.08,51.16c0,1.89-1.5,2.17-2.97,2.19h-3.69c-1.37-0.04-3.02-0.3-3.65-2.02l-8.44-22.37 c-0.23-0.63-0.24-1.1-0.01-1.41c0.35-0.5,1.21-0.56,2.07-0.56c0.16,0,0.32,0,0.48,0c0.15,0,0.29,0,0.43,0l12.78,0 c1.47,0.02,2.98,0.3,2.98,2.19V51.16z M97.99,51.16c0,1.89-1.5,2.17-2.97,2.19h-3.9c-1.47-0.02-2.97-0.3-2.97-2.19V29.18 c0-1.89,1.51-2.17,2.98-2.19h3.88c1.47,0.02,2.98,0.3,2.98,2.19V51.16z"></path> </g></g><g> <g> <polygon points="110.44,73.98 107.67,69.24 107.11,69.24 107.11,75.63 107.76,75.63 107.76,70.55 110.27,74.82 110.59,74.82 113.09,70.52 113.09,75.63 113.74,75.63 113.74,69.24 113.19,69.24 "></polygon> <path d="M118.81,69.24l-2.92,6.39h0.7l0.77-1.71h3.56l0.77,1.71h0.71l-2.92-6.39H118.81z M117.61,73.37l1.53-3.43 l1.53,3.43H117.61z"></path> <rect x="124.55" y="69.24" width="0.68" height="6.39"></rect> <path d="M132.28,74.82c0.17-0.26,0.26-0.56,0.26-0.88c0-0.39-0.1-0.7-0.3-0.93c-0.2-0.23-0.45-0.4-0.73-0.51 c-0.29-0.11-0.67-0.23-1.14-0.34c-0.4-0.1-0.71-0.19-0.94-0.27c-0.23-0.08-0.43-0.2-0.58-0.36c-0.16-0.16-0.23-0.36-0.23-0.62 c0-0.34,0.14-0.62,0.42-0.83c0.28-0.22,0.7-0.32,1.26-0.32c0.29,0,0.59,0.04,0.89,0.13c0.3,0.09,0.59,0.22,0.86,0.4l0.23-0.54 c-0.26-0.18-0.56-0.31-0.91-0.42c-0.35-0.1-0.71-0.15-1.07-0.15c-0.52,0-0.96,0.08-1.31,0.24c-0.35,0.16-0.61,0.37-0.78,0.63 c-0.17,0.26-0.26,0.56-0.26,0.88c0,0.4,0.1,0.71,0.31,0.94c0.2,0.23,0.45,0.4,0.73,0.52c0.29,0.11,0.67,0.23,1.15,0.35 c0.4,0.1,0.71,0.19,0.94,0.27c0.22,0.08,0.42,0.2,0.57,0.35c0.15,0.15,0.23,0.36,0.23,0.61c0,0.33-0.14,0.61-0.43,0.82 c-0.29,0.21-0.71,0.31-1.29,0.31c-0.41,0-0.8-0.07-1.19-0.21c-0.38-0.14-0.69-0.33-0.92-0.56l-0.26,0.52 c0.24,0.25,0.57,0.45,1.01,0.6c0.43,0.15,0.89,0.23,1.36,0.23c0.52,0,0.96-0.08,1.32-0.23C131.84,75.29,132.11,75.08,132.28,74.82 z"></path> <path d="M140.81,74.1c0.29-0.5,0.44-1.05,0.44-1.66c0-0.61-0.15-1.17-0.44-1.67c-0.29-0.5-0.69-0.88-1.2-1.16 c-0.51-0.28-1.08-0.42-1.71-0.42c-0.63,0-1.21,0.14-1.72,0.42c-0.51,0.28-0.92,0.67-1.2,1.16c-0.29,0.49-0.43,1.05-0.43,1.66 c0,0.61,0.14,1.17,0.43,1.66c0.29,0.49,0.69,0.88,1.2,1.16c0.51,0.28,1.09,0.42,1.72,0.42c0.63,0,1.2-0.14,1.71-0.42 C140.12,74.98,140.52,74.6,140.81,74.1z M137.9,75.08c-0.5,0-0.96-0.11-1.37-0.34c-0.41-0.23-0.73-0.54-0.97-0.95 c-0.23-0.4-0.35-0.86-0.35-1.35c0-0.5,0.12-0.95,0.35-1.35c0.23-0.4,0.56-0.72,0.97-0.95c0.41-0.23,0.87-0.34,1.37-0.34 c0.5,0,0.96,0.11,1.37,0.34c0.41,0.23,0.73,0.54,0.96,0.95c0.23,0.4,0.35,0.86,0.35,1.35c0,0.5-0.12,0.95-0.35,1.35 c-0.23,0.4-0.55,0.72-0.96,0.95C138.86,74.97,138.4,75.08,137.9,75.08z"></path> <polygon points="148.53,74.42 144.41,69.24 143.86,69.24 143.86,75.63 144.53,75.63 144.53,70.45 148.64,75.63 149.19,75.63 149.19,69.24 148.53,69.24 "></polygon> </g> <g> <polygon points="159.71,73.92 156.94,69.19 156.38,69.19 156.38,75.57 157.03,75.57 157.03,70.49 159.54,74.76 159.85,74.76 162.36,70.46 162.36,75.57 163.01,75.57 163.01,69.19 162.45,69.19 "></polygon> <polygon points="166.86,72.62 170.16,72.62 170.16,72.04 166.86,72.04 166.86,69.77 170.57,69.77 170.57,69.19 166.19,69.19 166.19,75.57 170.7,75.57 170.7,74.99 166.86,74.99 "></polygon> <polygon points="175.18,72.77 172.99,69.19 172.27,69.19 174.83,73.36 174.83,75.57 175.49,75.57 175.49,73.36 178.05,69.19 177.37,69.19 "></polygon> <polygon points="180.73,72.62 184.03,72.62 184.03,72.04 180.73,72.04 180.73,69.77 184.43,69.77 184.43,69.19 180.05,69.19 180.05,75.57 184.57,75.57 184.57,74.99 180.73,74.99 "></polygon> <path d="M191.87,72.64c0.25-0.34,0.38-0.76,0.38-1.26c0-0.68-0.23-1.22-0.69-1.61c-0.46-0.39-1.1-0.58-1.92-0.58 h-2.39v6.39h0.68v-2.03h1.71c0.18,0,0.35-0.01,0.51-0.03l1.46,2.05h0.74l-1.56-2.19C191.26,73.23,191.62,72.98,191.87,72.64z M189.62,72.97h-1.7v-3.2h1.7c0.63,0,1.12,0.14,1.45,0.42c0.33,0.28,0.5,0.67,0.5,1.19c0,0.51-0.17,0.9-0.5,1.18 C190.74,72.83,190.26,72.97,189.62,72.97z"></path> </g></g></svg><h1 id="dname" class="sr"></h1><p id="dsub"></p></div>
+  <span class="sp"></span>
+  <button class="btn pub" id="pub" data-act="publish">À jour</button>
+  <div class="menu-wrap">
+   <button class="btn icon-btn" data-act="menu" aria-label="Menu">···</button>
+   <div class="menu" id="menu" hidden>
+    <button data-act="settings">⚙️ Paramètres</button>
+    <button data-act="theme">🌓 Thème : <span id="themeLbl"></span></button>
+    <hr>
+    <button data-act="export-csv">📄 Exporter en CSV (Excel)</button>
+    <button data-act="export-json">💾 Sauvegarde complète (JSON)</button>
+    <button data-act="import-json">📥 Restaurer une sauvegarde</button>
+   </div>
+  </div>
+ </header>
+ <nav class="tabs">
+  <button data-tab="tables">Tables</button>
+  <button data-tab="carte">Carte</button>
+  <button data-tab="vins">Vins</button>
+  <button data-tab="relances">À relancer <span class="badge-n" id="nRel"></span></button>
+  <button data-tab="stats">Statistiques</button>
+ </nav>
+ <main id="view"></main>
+</div>
+<dialog id="dlg"><div class="m" id="dlgIn"></div></dialog>
+<input type="file" id="fileIn" accept=".json,application/json" hidden>
+<div class="toast" id="toast"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+const DATA_INIT = /* __CAVE_DATA__ */{"_ts":0,"_demo":true,"domaine":{"nom":"Maison Meyer","sousTitre":"Sainte Joie · Arnta — les tables qui servent nos vins"},"vins":[{"id":"v5","marque":"Sainte Joie","nom":"Gewurztraminer Grand Cru Hengst Vendanges Tardives","millesime":"2018","couleur":"Moelleux","cepage":"Gewurztraminer","prixPro":null,"actif":true,"com":"Prix boutique : 65 € · bio"},{"id":"sj2","marque":"Sainte Joie","nom":"Pinot Gris Vendange Tardive","millesime":"2018","couleur":"Moelleux","cepage":"Pinot gris","prixPro":null,"actif":true,"com":"Prix boutique : 65 €"},{"id":"sj3","marque":"Sainte Joie","nom":"Crémant Brut Rosé","millesime":"","couleur":"Crémant rosé","cepage":"Pinot noir","prixPro":null,"actif":true,"com":"Prix boutique : 26 €"},{"id":"v4","marque":"Sainte Joie","nom":"Crémant d'Alsace Brut Nature","millesime":"","couleur":"Crémant","cepage":"Pinot noir, Pinot blanc, Auxerrois","prixPro":null,"actif":true,"com":"Prix boutique : 26 € · bio"},{"id":"sj5","marque":"Sainte Joie","nom":"Crémant d'Alsace Brut","millesime":"","couleur":"Crémant","cepage":"Chardonnay, Pinot noir, Pinot blanc","prixPro":null,"actif":true,"com":"Prix boutique : 38 € · bio · assemblage 2016 et 2012–2015"},{"id":"v3","marque":"Sainte Joie","nom":"Pinot Noir","millesime":"2023","couleur":"Rouge","cepage":"Pinot noir","prixPro":null,"actif":true,"com":"Prix boutique : 46 €"},{"id":"v1","marque":"Sainte Joie","nom":"Riesling","millesime":"2023","couleur":"Blanc","cepage":"Riesling","prixPro":null,"actif":true,"com":"Prix boutique : 40 € · bio"},{"id":"sj8","marque":"Sainte Joie","nom":"Champagne","millesime":"","couleur":"Champagne","cepage":"Chardonnay, Pinot noir","prixPro":null,"actif":true,"com":"Prix boutique : 65 €"},{"id":"sj9","marque":"Sainte Joie","nom":"Champagne Premier Cru Blanc de Blancs","millesime":"2018","couleur":"Champagne","cepage":"Chardonnay","prixPro":null,"actif":true,"com":"Prix boutique : 120 €"},{"id":"sj10","marque":"Sainte Joie","nom":"Rosé Coteaux Varois en Provence","millesime":"2024","couleur":"Rosé","cepage":"Grenache, Syrah, Cinsault","prixPro":null,"actif":true,"com":"Prix boutique : 26 € · bio"},{"id":"ar1","marque":"Arnta","nom":"Riesling","millesime":"","couleur":"Blanc","cepage":"Riesling","prixPro":null,"actif":true,"com":"Prix boutique : 17,50 €"},{"id":"ar2","marque":"Arnta","nom":"Auxerrois","millesime":"","couleur":"Blanc","cepage":"Auxerrois","prixPro":null,"actif":true,"com":"Prix boutique : 15,90 €"},{"id":"ar3","marque":"Arnta","nom":"Gewurztraminer","millesime":"","couleur":"Blanc","cepage":"Gewurztraminer","prixPro":null,"actif":true,"com":"Prix boutique : 18,50 €"},{"id":"v2","marque":"Arnta","nom":"Pinot Blanc","millesime":"","couleur":"Blanc","cepage":"Pinot blanc","prixPro":null,"actif":true,"com":"Prix boutique : 16,50 €"}],"restos":[{"id":"r1","nom":"La Table du Marché","type":"Bistrot","distinction":"","statut":"actif","adresse":"","cp":"67000","commune":"Strasbourg","lat":48.5818,"lng":7.7489,"contact":"Julien (chef)","tel":"","email":"","site":"","depuis":"2024-03-01","relance":"","tags":"","com":"","refs":[{"vin":"v1","prixCarte":48,"verre":false},{"vin":"v2","prixCarte":32,"verre":true},{"vin":"v4","prixCarte":39,"verre":true}],"cmds":[{"id":"c1","date":"2026-09-18","vin":"v2","qte":24,"com":""},{"id":"c2","date":"2026-09-18","vin":"v4","qte":12,"com":""},{"id":"c3","date":"2026-07-02","vin":"v1","qte":12,"com":""},{"id":"c4","date":"2026-05-11","vin":"v2","qte":24,"com":""},{"id":"c5","date":"2026-02-20","vin":"v4","qte":18,"com":""},{"id":"c6","date":"2025-11-30","vin":"v1","qte":6,"com":""}],"journal":[{"id":"j1","date":"2026-09-18","txt":"Passage au restaurant : très contents du Pinot Gris au verre."}]},{"id":"r2","nom":"Le Jardin d'Hiver","type":"Gastronomique","distinction":"1 étoile","statut":"actif","adresse":"","cp":"68000","commune":"Colmar","lat":48.0778,"lng":7.3584,"contact":"Claire (sommelière)","tel":"","email":"","site":"","depuis":"2023-06-15","relance":"2026-10-15","tags":"","com":"","refs":[{"vin":"v1","prixCarte":72,"verre":false},{"vin":"v5","prixCarte":95,"verre":true},{"vin":"v3","prixCarte":68,"verre":false}],"cmds":[{"id":"c7","date":"2026-08-27","vin":"v5","qte":6,"com":""},{"id":"c8","date":"2026-08-27","vin":"v1","qte":12,"com":""},{"id":"c9","date":"2026-04-14","vin":"v3","qte":12,"com":""},{"id":"c10","date":"2026-01-09","vin":"v1","qte":12,"com":""}],"journal":[{"id":"j2","date":"2026-08-27","txt":"La sommelière souhaite goûter le prochain millésime du Riesling."}]},{"id":"r3","nom":"Winstub Zum Rebstock","type":"Winstub","distinction":"","statut":"actif","adresse":"","cp":"67210","commune":"Obernai","lat":48.4627,"lng":7.4824,"contact":"","tel":"","email":"","site":"","depuis":"2025-04-01","relance":"","tags":"","com":"","refs":[{"vin":"v2","prixCarte":29,"verre":true},{"vin":"v3","prixCarte":34,"verre":true}],"cmds":[{"id":"c11","date":"2026-05-20","vin":"v2","qte":36,"com":""},{"id":"c12","date":"2026-05-20","vin":"v3","qte":24,"com":""},{"id":"c13","date":"2025-12-05","vin":"v2","qte":30,"com":""}],"journal":[]},{"id":"r4","nom":"Le Comptoir des Vignes","type":"Bar à vins","distinction":"","statut":"prospect","adresse":"","cp":"68100","commune":"Mulhouse","lat":47.7486,"lng":7.3389,"contact":"","tel":"","email":"","site":"","depuis":"","relance":"2026-10-08","tags":"","com":"","refs":[],"cmds":[],"journal":[{"id":"j3","date":"2026-09-24","txt":"Échantillons de Crémant et de Pinot Noir déposés. Rappeler début octobre."}]},{"id":"r5","nom":"Hôtel des Remparts","type":"Hôtel-restaurant","distinction":"","statut":"pause","adresse":"","cp":"68340","commune":"Riquewihr","lat":48.1666,"lng":7.2973,"contact":"","tel":"","email":"","site":"","depuis":"2024-05-01","relance":"","tags":"","com":"Changement de chef au printemps, à recontacter.","refs":[{"vin":"v4","prixCarte":45,"verre":true}],"cmds":[{"id":"c14","date":"2025-10-12","vin":"v4","qte":24,"com":""}],"journal":[]}],"marques":["Sainte Joie","Arnta"]}/* __END__ */;
+
+/* ───────── Constantes ───────── */
+const MK1 = '/* __CAVE' + '_DATA__ */', MK2 = '/* __E' + 'ND__ */';
+const RE_DATA = /\/\* __CAVE_DATA__ \*\/([\s\S]*?)\/\* __END__ \*\//;
+const LS_DATA = 'cave_data', LS_CFG = 'cave_cfg', LS_PUB = 'cave_pub_ts', LS_TAB = 'cave_tab', LS_THEME = 'cave_theme', LS_TOKEN = 'gh_token';
+const COUL = {'Blanc':'#e3c96c','Rouge':'#7a1f3d','Rosé':'#e99aa3','Crémant':'#efe0a0','Crémant rosé':'#f0b4bb','Champagne':'#f2e4b0','Moelleux':'#c48d26','Orange':'#d7843a'};
+const STATUTS = {actif:{l:'Client actif',c:'var(--ok)',h:'#3d7a4c'},prospect:{l:'Prospect',c:'var(--accent)',h:'#b5863a'},pause:{l:'En pause',c:'var(--idle)',h:'#8b8682'},perdu:{l:'Perdu',c:'var(--bad)',h:'#a63b3b'}};
+const TYPES = ['Gastronomique','Bistrot','Brasserie','Winstub','Bar à vins','Hôtel-restaurant','Traiteur','Caviste','Autre'];
+const DISTS = ['','Assiette Michelin','Bib Gourmand','1 étoile','2 étoiles','3 étoiles','Gault&Millau'];
+
+/* ───────── Utilitaires ───────── */
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const clone = o => JSON.parse(JSON.stringify(o));
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+const isoLocal = d => new Date(d.getTime() - d.getTimezoneOffset() * 6e4).toISOString().slice(0, 10);
+const today = () => isoLocal(new Date());
+const addDays = (s, n) => { const d = new Date(s + 'T12:00'); d.setDate(d.getDate() + n); return isoLocal(d); };
+const daysSince = s => Math.round((Date.parse(today() + 'T12:00') - Date.parse(s + 'T12:00')) / 864e5);
+const fmtD = s => s ? new Date(s + 'T12:00').toLocaleDateString('fr-FR', {day:'numeric', month:'short', year:'numeric'}) : '—';
+const norm = s => String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+const numOrNull = v => { v = String(v ?? '').trim().replace(',', '.'); if (v === '') return null; const n = parseFloat(v); return isNaN(n) ? null : n; };
+const eur = n => (n == null || n === '' || isNaN(n)) ? '—' : Number(n).toLocaleString('fr-FR', {style:'currency', currency:'EUR', maximumFractionDigits: n % 1 ? 2 : 0});
+const plural = (n, s, p) => n + ' ' + (n > 1 ? (p || s + 's') : s);
+function ago(s) {
+  const n = daysSince(s);
+  if (n <= 0) return "aujourd'hui";
+  if (n === 1) return 'hier';
+  if (n < 31) return `il y a ${n} j`;
+  if (n < 365) return `il y a ${Math.round(n / 30.4)} mois`;
+  const y = Math.round(n / 36.5) / 10;
+  return `il y a ${String(y).replace('.', ',')} an${y >= 2 ? 's' : ''}`;
+}
+function toast(msg, ms = 2600) { const t = $('#toast'); t.textContent = msg; t.classList.add('on'); clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove('on'), ms); }
+function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+function lsDel(k) { try { localStorage.removeItem(k); } catch (e) {} }
+
+/* ───────── Configuration & état ───────── */
+function detectRepo() {
+  const h = location.hostname;
+  if (!h.endsWith('.github.io')) return {};
+  const owner = h.split('.')[0];
+  const seg = location.pathname.split('/').filter(Boolean)[0];
+  return {owner, repo: seg && !seg.endsWith('.html') ? seg : h};
+}
+let CFG = Object.assign({owner:'', repo:'', branch:'main', path:'index.html', relance:90}, detectRepo(), (() => { try { return JSON.parse(lsGet(LS_CFG) || '{}'); } catch (e) { return {}; } })());
+let TOKEN = lsGet(LS_TOKEN) || '';
+let S, PUB_TS, PUBBING = false;
+let TAB = lsGet(LS_TAB) || 'tables';
+const F = {q:'', statut:'', type:'', marque:'', vin:'', sort:'nom'};
+
+function loadState() {
+  let local = null;
+  try { local = JSON.parse(lsGet(LS_DATA)); } catch (e) {}
+  S = (local && (local._ts || 0) > (DATA_INIT._ts || 0)) ? local : clone(DATA_INIT);
+  PUB_TS = Math.max(DATA_INIT._ts || 0, +(lsGet(LS_PUB) || 0));
+  normalize();
+}
+function normalize() {
+  S.domaine = S.domaine || {nom:'Mon domaine', sousTitre:''};
+  S.vins = S.vins || []; S.restos = S.restos || []; S.marques = (S.marques && S.marques.length) ? S.marques : ['Sainte Joie', 'Arnta'];
+  S.restos.forEach(r => { r.refs = r.refs || []; r.cmds = r.cmds || []; r.journal = r.journal || []; r.statut = r.statut || 'prospect'; });
+}
+function touch() { S._ts = Date.now(); lsSet(LS_DATA, JSON.stringify(S)); updatePub(); }
+const isDirty = () => (S._ts || 0) > PUB_TS;
+
+/* ───────── Dérivés ───────── */
+const vinById = id => S.vins.find(v => v.id === id);
+const vinLabel = v => v ? v.nom + (v.millesime ? ' ' + v.millesime : '') + (v.marque && S.vins.some(w => w !== v && w.nom === v.nom && w.marque !== v.marque) ? ' (' + v.marque + ')' : '') : 'Vin supprimé';
+const vinDot = v => `<span class="dot" style="background:${COUL[v?.couleur] || '#bbb'}"></span>`;
+const lastOrder = r => r.cmds.reduce((m, c) => c.date > m ? c.date : m, '') || null;
+const bottles = (r, days, vin) => r.cmds.filter(c => (!days || daysSince(c.date) < days) && (!vin || c.vin === vin)).reduce((s, c) => s + (+c.qte || 0), 0);
+const chipStatut = s => { const st = STATUTS[s] || STATUTS.prospect; return `<span class="chip" style="--c:${st.c}">${st.l}</span>`; };
+const opt = (v, cur, label) => `<option value="${esc(v)}" ${v === cur ? 'selected' : ''}>${esc(label ?? (v || '—'))}</option>`;
+
+function relances() {
+  const N = +CFG.relance || 90, t = today();
+  const sansCde = S.restos.filter(r => r.statut === 'actif').map(r => ({r, lo: lastOrder(r)}))
+    .filter(x => !x.lo || daysSince(x.lo) >= N).sort((a, b) => (a.lo || '').localeCompare(b.lo || ''));
+  const prevues = S.restos.filter(r => r.relance && r.relance <= addDays(t, 7) && r.statut !== 'perdu').sort((a, b) => a.relance.localeCompare(b.relance));
+  const urgent = new Set([...sansCde.map(x => x.r.id), ...prevues.filter(r => r.relance <= t).map(r => r.id)]);
+  return {sansCde, prevues, urgent, N};
+}
+
+/* ───────── Rendu principal ───────── */
+function render() {
+  const nom = S.domaine.nom || 'Maison Meyer';
+  document.title = nom + ' — Nos tables';
+  $('#dname').textContent = nom;
+  $('#dsub').textContent = S.domaine.sousTitre || 'Les tables qui servent nos vins';
+  $$('nav.tabs [data-tab]').forEach(b => b.classList.toggle('on', b.dataset.tab === TAB));
+  const n = relances().urgent.size; $('#nRel').textContent = n || '';
+  const v = $('#view');
+  if (TAB !== 'carte' && MAP) { MAP.remove(); MAP = null; }
+  if (TAB === 'tables') { v.innerHTML = viewTables(); renderList(); }
+  else if (TAB === 'carte') { v.innerHTML = viewCarte(); drawMap(); }
+  else if (TAB === 'vins') v.innerHTML = viewVins();
+  else if (TAB === 'relances') v.innerHTML = viewRelances();
+  else if (TAB === 'stats') v.innerHTML = viewStats();
+  updatePub();
+}
+function updatePub() {
+  const b = $('#pub'), d = isDirty();
+  b.disabled = PUBBING;
+  b.classList.toggle('dirty', d && !PUBBING);
+  b.classList.toggle('primary', d || PUBBING);
+  b.textContent = PUBBING ? 'Publication…' : d ? 'Publier' : 'À jour ✓';
+  b.title = d ? 'Des modifications sont enregistrées sur cet appareil mais pas encore en ligne.' : 'Tout est publié.';
+}
+function demoBanner() {
+  return S._demo ? `<div class="banner">🍇 <span style="flex:1">Les <b>vins</b> sont ceux de vos deux boutiques, mais les <b>tables</b> sont des exemples inventés pour découvrir l'outil.</span><button class="btn sm" data-act="clear-demo">Effacer les tables d'exemple</button></div>` : '';
+}
+
+/* ── Tables ── */
+function viewTables() {
+  const types = [...new Set([...TYPES, ...S.restos.map(r => r.type)].filter(Boolean))];
+  return demoBanner() + `<div class="toolbar">
+    <input class="search" id="q" type="search" placeholder="Rechercher une table, une commune, un contact…" value="${esc(F.q)}">
+    <select id="fSt"><option value="">Tous statuts</option>${Object.entries(STATUTS).map(([k, s]) => opt(k, F.statut, s.l)).join('')}</select>
+    <select id="fTy"><option value="">Tous types</option>${types.map(t => opt(t, F.type)).join('')}</select>
+    <select id="fMq"><option value="">Toutes marques</option>${S.marques.map(m => opt(m, F.marque)).join('')}</select>
+    <select id="fVin"><option value="">Tous les vins</option>${S.vins.map(v => opt(v.id, F.vin, vinLabel(v))).join('')}</select>
+    <select id="fSort">${[['nom','Nom'],['recent','Dernière commande'],['volume','Bouteilles (12 mois)'],['commune','Commune']].map(([k, l]) => opt(k, F.sort, 'Tri : ' + l)).join('')}</select>
+    <button class="btn primary" data-act="new-resto">＋ Ajouter une table</button>
+  </div><div id="list"></div>`;
+}
+function renderList() {
+  const box = $('#list'); if (!box) return;
+  if (!S.restos.length) { box.innerHTML = `<div class="empty"><p style="font:600 22px 'Cormorant Garamond',serif;color:var(--ink);margin:0 0 6px">Aucune table pour l'instant</p><p>Ajoute le premier restaurant qui sert tes vins.</p><button class="btn primary" data-act="new-resto">＋ Ajouter une table</button></div>`; return; }
+  const q = norm(F.q);
+  const list = S.restos.filter(r => (!F.statut || r.statut === F.statut) && (!F.type || r.type === F.type) && (!F.vin || r.refs.some(x => x.vin === F.vin)) && (!F.marque || r.refs.some(x => vinById(x.vin)?.marque === F.marque))
+    && (!q || norm([r.nom, r.commune, r.cp, r.contact, r.tags, r.type].join(' ')).includes(q)));
+  const byNom = (a, b) => (a.nom || '').localeCompare(b.nom || '', 'fr');
+  const sorters = {nom: byNom, commune: (a, b) => (a.commune || '').localeCompare(b.commune || '', 'fr') || byNom(a, b),
+    recent: (a, b) => (lastOrder(b) || '').localeCompare(lastOrder(a) || '') || byNom(a, b), volume: (a, b) => bottles(b, 365) - bottles(a, 365) || byNom(a, b)};
+  list.sort(sorters[F.sort] || byNom);
+  box.innerHTML = list.length ? `<div class="count muted">${plural(list.length, 'table')}</div><div class="grid">${list.map(restoCard).join('')}</div>` : `<div class="empty">Aucune table ne correspond à ces filtres.</div>`;
+}
+function restoCard(r) {
+  const lo = lastOrder(r), b = bottles(r, 365);
+  const wines = r.refs.map(x => { const v = vinById(x.vin); return `<span class="wchip">${vinDot(v)}${esc(vinLabel(v))}${x.verre ? ' · verre' : ''}</span>`; }).join('');
+  return `<article class="card click" data-act="open-resto" data-id="${r.id}">
+    <div class="c-top"><h3>${esc(r.nom || 'Sans nom')}</h3>${chipStatut(r.statut)}</div>
+    <div class="c-meta">${esc(r.commune || 'Commune ?')}${r.type ? ' · ' + esc(r.type) : ''}${r.distinction ? ` · <span class="dist">${esc(r.distinction)}</span>` : ''}</div>
+    <div class="c-wines">${wines || '<span class="muted small">Aucun vin à la carte</span>'}</div>
+    <div class="c-foot"><span>${plural(b, 'bouteille')} / 12 mois</span><span>${lo ? 'Commande ' + ago(lo) : 'Aucune commande'}</span></div>
+  </article>`;
+}
+
+/* ── Carte ── */
+let MAP = null;
+function viewCarte() {
+  const sans = S.restos.filter(r => !(r.lat && r.lng));
+  return `<div class="toolbar"><span class="muted small">${plural(S.restos.length - sans.length, 'table')} sur la carte${sans.length ? ` · ${sans.length} sans position` : ''}</span>
+    ${sans.length ? '<button class="btn sm" data-act="geocode-all">📍 Localiser les adresses manquantes</button>' : ''}
+    <span class="sp"></span><div class="legend">${Object.values(STATUTS).map(s => `<span><span class="dot" style="background:${s.h}"></span>${s.l}</span>`).join('')}</div></div><div id="map"></div>`;
+}
+function drawMap() {
+  const el = $('#map');
+  if (typeof L === 'undefined') { el.innerHTML = '<div class="empty">La carte n\'a pas pu se charger (pas de connexion ?).</div>'; return; }
+  if (MAP) { MAP.remove(); MAP = null; }
+  MAP = L.map(el);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom: 19, attribution: '© OpenStreetMap'}).addTo(MAP);
+  const pts = [];
+  S.restos.filter(r => r.lat && r.lng).forEach(r => {
+    const m = L.circleMarker([r.lat, r.lng], {radius: 9, color: '#fff', weight: 2, fillColor: (STATUTS[r.statut] || STATUTS.prospect).h, fillOpacity: .95}).addTo(MAP);
+    const wines = r.refs.map(x => esc(vinLabel(vinById(x.vin)))).join(', ');
+    m.bindPopup(`<b>${esc(r.nom)}</b><br><span style="color:#80706b">${esc(r.commune || '')}${r.type ? ' · ' + esc(r.type) : ''}</span>${wines ? '<br>' + wines : ''}<br><a href="#" data-pop="${r.id}">Ouvrir la fiche →</a>`);
+    pts.push([r.lat, r.lng]);
+  });
+  MAP.on('popupopen', e => { const a = e.popup.getElement().querySelector('[data-pop]'); if (a) a.onclick = ev => { ev.preventDefault(); openResto(a.dataset.pop); }; });
+  if (pts.length) MAP.fitBounds(pts, {padding: [40, 40], maxZoom: 12}); else MAP.setView([48.3, 7.45], 8);
+  setTimeout(() => MAP && MAP.invalidateSize(), 60);
+}
+async function geocode(r) {
+  const q = [r.adresse, r.cp, r.commune].filter(Boolean).join(', ');
+  if (!q) return null;
+  try {
+    const res = await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q=' + encodeURIComponent(q), {headers: {'Accept-Language': 'fr'}});
+    const j = await res.json();
+    return j[0] ? [+(+j[0].lat).toFixed(5), +(+j[0].lon).toFixed(5)] : null;
+  } catch (e) { return null; }
+}
+async function geocodeAll() {
+  const todo = S.restos.filter(r => !(r.lat && r.lng));
+  let ok = 0;
+  for (let i = 0; i < todo.length; i++) {
+    toast(`Localisation ${i + 1}/${todo.length}…`, 4000);
+    const p = await geocode(todo[i]);
+    if (p) { [todo[i].lat, todo[i].lng] = p; ok++; }
+    if (i < todo.length - 1) await new Promise(res => setTimeout(res, 1100));
+  }
+  if (ok) touch();
+  toast(ok === todo.length ? 'Toutes les tables sont localisées.' : `${ok}/${todo.length} localisées — complète l'adresse des autres.`);
+  render();
+}
+
+/* ── Vins ── */
+function wineStats(v) {
+  const tables = S.restos.filter(r => r.refs.some(x => x.vin === v.id));
+  const bt = S.restos.reduce((s, r) => s + bottles(r, 365, v.id), 0);
+  const prix = tables.map(r => r.refs.find(x => x.vin === v.id).prixCarte).filter(x => x > 0);
+  const moy = prix.length ? prix.reduce((a, b) => a + b, 0) / prix.length : null;
+  return {tables, actives: tables.filter(r => r.statut === 'actif').length, bt, moy, coef: moy && v.prixPro ? moy / v.prixPro : null, verre: tables.filter(r => r.refs.find(x => x.vin === v.id).verre).length};
+}
+function viewVins() {
+  const head = `<div class="toolbar"><span class="muted small">${plural(S.vins.length, 'vin')} au catalogue</span><span class="sp"></span><button class="btn primary" data-act="new-vin">＋ Ajouter un vin</button></div>`;
+  if (!S.vins.length) return demoBanner() + head + `<div class="empty">Commence par ajouter les vins de ton domaine : ils serviront ensuite pour les cartes et les commandes.</div>`;
+  const sortV = arr => [...arr].sort((a, b) => (b.actif !== false) - (a.actif !== false) || a.nom.localeCompare(b.nom, 'fr'));
+  const card = v => {
+    const s = wineStats(v);
+    return `<article class="card ${v.actif === false ? 'archived' : ''}">
+      <div class="c-top"><h3 style="display:flex;align-items:center;gap:8px">${vinDot(v)}${esc(vinLabel(v))}</h3><button class="btn ghost sm" data-act="edit-vin" data-id="${v.id}">Modifier</button></div>
+      <div class="c-meta">${v.marque ? `<span class="mq">${esc(v.marque)}</span> · ` : ''}${esc(v.couleur || '')}${v.cepage ? ' · ' + esc(v.cepage) : ''} · prix pro ${v.prixPro ? eur(v.prixPro) : '<i>à renseigner</i>'}${v.actif === false ? ' · <b>épuisé / archivé</b>' : ''}${v.com ? `<br>${esc(v.com)}` : ''}</div>
+      <div class="w-stats"><div><b>${s.tables.length}</b><span>table${s.tables.length > 1 ? 's' : ''} (${s.actives} active${s.actives > 1 ? 's' : ''})</span></div><div><b>${s.bt}</b><span>bt / 12 mois</span></div><div><b>${s.moy ? eur(Math.round(s.moy)) : '—'}</b><span>prix carte moyen</span></div><div><b>${s.coef ? '×' + s.coef.toFixed(1).replace('.', ',') : '—'}</b><span>coefficient</span></div></div>
+      ${s.tables.length ? `<div class="links">${s.tables.map(r => `<a href="#" data-act="open-resto" data-id="${r.id}">${esc(r.nom)}</a>`).join('')}</div>` : '<span class="muted small">Pas encore à la carte d\'une table.</span>'}
+    </article>`;
+  };
+  const groups = [...S.marques, ...new Set(S.vins.map(v => v.marque).filter(m => m && !S.marques.includes(m)))];
+  const sec = (titre, arr) => arr.length ? `<h3 class="sec">${esc(titre)} <small>${plural(arr.length, 'vin')}</small></h3><div class="grid" style="padding-bottom:8px">${sortV(arr).map(card).join('')}</div>` : '';
+  return demoBanner() + head + groups.map(g => sec(g, S.vins.filter(v => v.marque === g))).join('') + sec('Sans marque', S.vins.filter(v => !v.marque || !groups.includes(v.marque))) + '<div style="height:40px"></div>';
+}
+
+/* ── Relances ── */
+function relRow(r, info) {
+  return `<div class="list-row" data-act="open-resto" data-id="${r.id}" data-tab="journal"><div style="flex:1;min-width:0"><b>${esc(r.nom)}</b> <span class="muted">· ${esc(r.commune || '')}</span><div class="muted small">${info}</div></div>${chipStatut(r.statut)}<span class="chev">›</span></div>`;
+}
+function viewRelances() {
+  const {sansCde, prevues, N} = relances(), t = today();
+  const prospects = S.restos.filter(r => r.statut === 'prospect');
+  const lastJ = r => r.journal.reduce((m, j) => j.date > m.date ? j : m, {date: ''});
+  let h = '';
+  h += `<h3 class="sec">Relances prévues <small>en retard ou dans les 7 jours</small></h3>`;
+  h += prevues.length ? prevues.map(r => relRow(r, (r.relance < t ? `⚠️ prévue le ${fmtD(r.relance)} (${ago(r.relance)})` : r.relance === t ? "📅 prévue aujourd'hui" : `📅 prévue le ${fmtD(r.relance)}`))).join('') : '<p class="muted small">Rien de prévu cette semaine.</p>';
+  h += `<h3 class="sec">Clients sans commande <small>depuis plus de ${N} jours</small></h3>`;
+  h += sansCde.length ? sansCde.map(({r, lo}) => relRow(r, lo ? `Dernière commande ${ago(lo)} (${fmtD(lo)}) · ${plural(bottles(r, 365), 'bouteille')} sur 12 mois` : 'Aucune commande enregistrée')).join('') : '<p class="muted small">Tous les clients actifs ont commandé récemment. 🍷</p>';
+  h += `<h3 class="sec">Prospects <small>${prospects.length}</small></h3>`;
+  h += prospects.length ? prospects.map(r => { const j = lastJ(r); return relRow(r, j.date ? `Dernier échange ${ago(j.date)} : ${esc(j.txt.slice(0, 90))}${j.txt.length > 90 ? '…' : ''}` : 'Aucun échange noté'); }).join('') : '<p class="muted small">Aucun prospect en cours.</p>';
+  return h + '<div style="height:40px"></div>';
+}
+
+/* ── Statistiques ── */
+function bars(rows, fmt) {
+  if (!rows.length) return '<p class="muted small">Pas encore de données.</p>';
+  const max = Math.max(1, ...rows.map(r => r.v));
+  return rows.map(r => `<div class="bar-row"><span class="bl" title="${esc(r.k)}">${r.dot || ''}${esc(r.k)}</span><span class="bt"><i style="width:${(r.v / max * 100).toFixed(1)}%;${r.c ? 'background:' + r.c : ''}"></i></span><span class="bv">${fmt ? fmt(r.v) : r.v}</span></div>`).join('');
+}
+function viewStats() {
+  const actifs = S.restos.filter(r => r.statut === 'actif');
+  const bt12 = S.restos.reduce((s, r) => s + bottles(r, 365), 0);
+  const ca12 = S.restos.reduce((s, r) => s + r.cmds.filter(c => daysSince(c.date) < 365).reduce((a, c) => a + (+c.qte || 0) * (+(vinById(c.vin)?.prixPro) || 0), 0), 0);
+  const coefs = []; S.restos.forEach(r => r.refs.forEach(x => { const v = vinById(x.vin); if (x.prixCarte > 0 && v?.prixPro > 0) coefs.push(x.prixCarte / v.prixPro); }));
+  const coef = coefs.length ? coefs.reduce((a, b) => a + b, 0) / coefs.length : null;
+  const refs = S.restos.reduce((s, r) => s + r.refs.length, 0);
+  // 12 derniers mois
+  const months = [];
+  for (let i = 11; i >= 0; i--) { const d = new Date(); d.setDate(1); d.setMonth(d.getMonth() - i); months.push({k: d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0'), l: d.toLocaleDateString('fr-FR', {month: 'short'}).replace('.', ''), v: 0}); }
+  S.restos.forEach(r => r.cmds.forEach(c => { const m = months.find(m => m.k === c.date.slice(0, 7)); if (m) m.v += +c.qte || 0; }));
+  const mMax = Math.max(1, ...months.map(m => m.v));
+  const parVin = S.vins.map(v => ({k: vinLabel(v), v: S.restos.reduce((s, r) => s + bottles(r, 365, v.id), 0), c: COUL[v.couleur], dot: vinDot(v)})).filter(x => x.v).sort((a, b) => b.v - a.v);
+  const parMq = S.marques.map(mq => ({k: mq, v: S.restos.reduce((s, r) => s + r.cmds.filter(c => daysSince(c.date) < 365 && vinById(c.vin)?.marque === mq).reduce((a, c) => a + (+c.qte || 0), 0), 0), t: S.restos.filter(r => r.refs.some(x => vinById(x.vin)?.marque === mq)).length}));
+  const top = S.restos.map(r => ({k: r.nom, v: bottles(r, 365)})).filter(x => x.v).sort((a, b) => b.v - a.v).slice(0, 8);
+  const group = (arr, f) => Object.entries(arr.reduce((o, r) => { const k = f(r) || 'Non renseigné'; o[k] = (o[k] || 0) + 1; return o; }, {})).map(([k, v]) => ({k, v})).sort((a, b) => b.v - a.v);
+  const parStatut = Object.entries(STATUTS).map(([k, s]) => ({k: s.l, v: S.restos.filter(r => r.statut === k).length, c: s.h})).filter(x => x.v);
+  return `<div class="kpis">
+    <div class="kpi"><b>${actifs.length}</b><span>clients actifs</span></div>
+    <div class="kpi"><b>${S.restos.filter(r => r.statut === 'prospect').length}</b><span>prospects en cours</span></div>
+    <div class="kpi"><b>${bt12.toLocaleString('fr-FR')}</b><span>bouteilles sur 12 mois</span></div>
+    <div class="kpi"><b>${eur(Math.round(ca12))}</b><span>CA estimé 12 mois (prix pro)</span></div>
+    <div class="kpi"><b>${refs}</b><span>références à la carte</span></div>
+    <div class="kpi"><b>${coef ? '×' + coef.toFixed(1).replace('.', ',') : '—'}</b><span>coefficient moyen carte / pro</span></div>
+  </div>
+  <div class="panels">
+    <div class="panel" style="grid-column:1/-1"><h4>Bouteilles commandées par mois</h4><div class="cols">${months.map(m => `<div class="col"><em>${m.v || ''}</em><i style="height:${(m.v / mMax * 120).toFixed(0)}px"></i>${m.l}</div>`).join('')}</div></div>
+    <div class="panel"><h4>Par marque · 12 mois</h4>${bars(parMq.filter(x => x.v), v => v + ' bt')}${parMq.map(x => `<p class="muted small" style="margin:4px 0">${esc(x.k)} : à la carte de ${plural(x.t, 'table')}</p>`).join('')}</div>
+    <div class="panel"><h4>Bouteilles par vin · 12 mois</h4>${bars(parVin)}</div>
+    <div class="panel"><h4>Meilleures tables · 12 mois</h4>${bars(top)}</div>
+    <div class="panel"><h4>Clients actifs par type</h4>${bars(group(actifs, r => r.type))}</div>
+    <div class="panel"><h4>Clients actifs par commune</h4>${bars(group(actifs, r => r.commune).slice(0, 10))}</div>
+    <div class="panel"><h4>Répartition par statut</h4>${bars(parStatut)}</div>
+  </div>`;
+}
+
+/* ───────── Fiche restaurant ───────── */
+let MODE = null, D = null, DT = 'infos', IS_NEW = false;
+const dlg = $('#dlg');
+function newResto() { return {id: uid(), nom: '', type: '', distinction: '', statut: 'prospect', adresse: '', cp: '', commune: '', lat: null, lng: null, contact: '', tel: '', email: '', site: '', depuis: '', relance: '', tags: '', com: '', refs: [], cmds: [], journal: []}; }
+function openResto(id, tab) {
+  const r = S.restos.find(x => x.id === id);
+  IS_NEW = !r; D = r ? clone(r) : newResto(); DT = tab || 'infos'; MODE = 'resto';
+  renderRM(); if (!dlg.open) dlg.showModal();
+  if (IS_NEW) setTimeout(() => $('#dlg [data-f=nom]')?.focus(), 50);
+}
+function renderRM() {
+  const tabs = [['infos', 'Infos'], ['vins', `Vins à la carte · ${D.refs.length}`], ['cmds', `Commandes · ${D.cmds.length}`], ['journal', `Journal · ${D.journal.length}`]];
+  const body = DT === 'vins' ? rmVins() : DT === 'cmds' ? rmCmds() : DT === 'journal' ? rmJournal() : rmInfos();
+  $('#dlgIn').innerHTML = `<div class="m-head"><h2>${esc(D.nom || 'Nouvelle table')}</h2>${chipStatut(D.statut)}<button class="btn ghost icon-btn" data-act="close" aria-label="Fermer">✕</button></div>
+    <div class="subtabs">${tabs.map(([k, l]) => `<button class="${k === DT ? 'on' : ''}" data-act="sub" data-t="${k}">${l}</button>`).join('')}</div>
+    <div class="m-body">${body}</div>
+    <div class="m-foot">${!IS_NEW ? '<button class="btn ghost danger" data-act="del-resto">Supprimer</button>' : ''}<span class="sp"></span><button class="btn" data-act="close">Annuler</button><button class="btn primary" data-act="save-resto">Enregistrer</button></div>`;
+}
+function fld(label, k, extra = '', cls = '') { return `<label class="${cls}">${label}<input data-f="${k}" value="${esc(D[k] ?? '')}" ${extra}></label>`; }
+function rmInfos() {
+  return `<div class="form">
+    ${fld('Nom de l\'établissement *', 'nom', 'placeholder="ex. Au Cerf"', 'full')}
+    <label>Statut<select data-f="statut">${Object.entries(STATUTS).map(([k, s]) => opt(k, D.statut, s.l)).join('')}</select></label>
+    <label>Type<select data-f="type">${opt('', D.type, '—')}${[...new Set([...TYPES, D.type].filter(Boolean))].map(t => opt(t, D.type)).join('')}</select></label>
+    <label>Distinction<select data-f="distinction">${DISTS.map(t => opt(t, D.distinction, t || 'Aucune')).join('')}</select></label>
+    ${fld('Client depuis', 'depuis', 'type="date"')}
+    <h5>Adresse</h5>
+    ${fld('Rue', 'adresse', 'placeholder="12 rue des Vignes"', 'full')}
+    ${fld('Code postal', 'cp', 'inputmode="numeric"')}
+    ${fld('Commune', 'commune')}
+    <label>Position (lat, lng)<span style="display:flex;gap:6px"><input data-f="lat" data-num value="${D.lat ?? ''}" placeholder="48.58" inputmode="decimal"><input data-f="lng" data-num value="${D.lng ?? ''}" placeholder="7.75" inputmode="decimal"></span></label>
+    <label>&nbsp;<button class="btn" data-act="geocode-one" type="button">📍 Localiser depuis l'adresse</button></label>
+    <h5>Contact</h5>
+    ${fld('Interlocuteur', 'contact', 'placeholder="Prénom (chef, sommelier…)"')}
+    ${fld('Téléphone', 'tel', 'type="tel"')}
+    ${fld('E-mail', 'email', 'type="email"')}
+    ${fld('Site web', 'site', 'placeholder="https://"')}
+    <h5>Suivi</h5>
+    ${fld('Prochaine relance', 'relance', 'type="date"')}
+    ${fld('Mots-clés', 'tags', 'placeholder="terrasse, carte des vins nature…"')}
+    <label class="full">Notes<textarea data-f="com" rows="3">${esc(D.com || '')}</textarea></label>
+  </div>`;
+}
+function rmVins() {
+  if (!S.vins.length) return `<div class="empty small">Ajoute d'abord tes vins dans l'onglet <b>Vins</b>.</div>`;
+  return `<p class="muted small" style="margin-top:0">Les vins du domaine présents à la carte de cette table, avec leur prix de vente au client.</p>
+    ${D.refs.length ? `<div class="rows"><div class="row hdr"><span>Vin</span><span>Prix carte (bt)</span><span></span><span></span></div>${D.refs.map((x, i) => {
+      const v = vinById(x.vin); const c = x.prixCarte > 0 && v?.prixPro > 0 ? ` title="Coefficient ×${(x.prixCarte / v.prixPro).toFixed(1)}"` : '';
+      return `<div class="row"><select data-ref="${i}" data-k="vin">${S.vins.map(v => opt(v.id, x.vin, vinLabel(v))).join('')}</select><input data-ref="${i}" data-k="prixCarte" inputmode="decimal" placeholder="€" value="${x.prixCarte ?? ''}"${c}><label class="chk"><input type="checkbox" data-ref="${i}" data-k="verre" ${x.verre ? 'checked' : ''}> au verre</label><button class="btn ghost sm" data-act="del-ref" data-i="${i}" aria-label="Retirer">✕</button></div>`;
+    }).join('')}</div>` : '<p class="muted small">Aucun vin à la carte pour l\'instant.</p>'}
+    <button class="btn sm" data-act="add-ref">＋ Ajouter un vin à la carte</button>`;
+}
+function rmCmds() {
+  const listed = D.refs.map(x => x.vin);
+  const vins = [...S.vins].filter(v => v.actif !== false || listed.includes(v.id)).sort((a, b) => listed.includes(b.id) - listed.includes(a.id));
+  const tot = D.cmds.reduce((s, c) => s + (+c.qte || 0), 0);
+  const rows = [...D.cmds].sort((a, b) => b.date.localeCompare(a.date));
+  return `<div class="addrow">
+      <input type="date" id="cDate" value="${today()}">
+      <select id="cVin">${vins.map(v => opt(v.id, '', vinLabel(v))).join('')}</select>
+      <input type="number" id="cQte" min="1" step="1" placeholder="Bt" inputmode="numeric">
+      <div class="full"><input id="cCom" placeholder="Note (facultatif)"><button class="btn primary sm" data-act="add-cmd">Ajouter</button></div>
+    </div>
+    ${rows.length ? `<table class="t"><thead><tr><th>Date</th><th>Vin</th><th class="num">Bt</th><th></th></tr></thead><tbody>${rows.map(c => { const v = vinById(c.vin); return `<tr><td style="white-space:nowrap">${fmtD(c.date)}</td><td>${vinDot(v)} ${esc(vinLabel(v))}${c.com ? `<div class="muted small">${esc(c.com)}</div>` : ''}</td><td class="num">${c.qte}</td><td style="text-align:right"><button class="btn ghost sm" data-act="del-cmd" data-id="${c.id}" aria-label="Supprimer">✕</button></td></tr>`; }).join('')}</tbody></table>
+    <p class="muted small">Total : ${plural(tot, 'bouteille')} · ${bottles(D, 365)} sur les 12 derniers mois</p>` : '<div class="empty small">Aucune commande enregistrée.</div>'}`;
+}
+function rmJournal() {
+  const rows = [...D.journal].sort((a, b) => b.date.localeCompare(a.date));
+  return `<div class="form" style="margin-bottom:12px"><label>Date<input type="date" id="jDate" value="${today()}"></label><label>Prochaine relance<input type="date" id="jRel" value="${esc(D.relance || '')}"></label>
+    <label class="full">Échange, visite, dégustation…<textarea id="jTxt" rows="3" placeholder="ex. Passé déposer des échantillons, le chef rappelle la semaine prochaine."></textarea></label>
+    <div class="full"><button class="btn primary sm" data-act="add-jr">Ajouter au journal</button></div></div>
+    ${rows.length ? rows.map(j => `<div class="jr"><div><time>${fmtD(j.date)}</time>${esc(j.txt)}</div><button class="btn ghost sm" data-act="del-jr" data-id="${j.id}" aria-label="Supprimer">✕</button></div>`).join('') : '<p class="muted small">Le journal est vide.</p>'}`;
+}
+function collect() {
+  $$('#dlg [data-f]').forEach(el => {
+    let v = el.type === 'checkbox' ? el.checked : el.value;
+    if (el.dataset.num !== undefined) v = numOrNull(v);
+    D[el.dataset.f] = v;
+  });
+}
+function saveResto() {
+  if (DT === 'infos') collect();
+  D.nom = (D.nom || '').trim();
+  if (!D.nom) { DT = 'infos'; renderRM(); toast('Indique au moins le nom de l\'établissement.'); return; }
+  const i = S.restos.findIndex(r => r.id === D.id);
+  if (i < 0) S.restos.push(D); else S.restos[i] = D;
+  touch(); dlg.close(); render(); toast(IS_NEW ? 'Table ajoutée.' : 'Fiche enregistrée.');
+}
+
+/* ───────── Fiche vin ───────── */
+function openVin(id) {
+  const v = S.vins.find(x => x.id === id);
+  IS_NEW = !v; D = v ? clone(v) : {id: uid(), nom: '', marque: S.marques[0] || '', millesime: '', couleur: 'Blanc', cepage: '', prixPro: null, actif: true, com: ''}; MODE = 'vin';
+  const used = v ? S.restos.filter(r => r.refs.some(x => x.vin === v.id) || r.cmds.some(c => c.vin === v.id)).length : 0;
+  $('#dlgIn').innerHTML = `<div class="m-head"><h2>${IS_NEW ? 'Nouveau vin' : esc(vinLabel(v))}</h2><button class="btn ghost icon-btn" data-act="close" aria-label="Fermer">✕</button></div>
+    <div class="m-body"><div class="form">
+      ${fld('Nom de la cuvée *', 'nom', 'placeholder="ex. Riesling Grand Cru Schlossberg"', 'full')}
+      <label>Marque<select data-f="marque">${opt('', D.marque, '—')}${[...new Set([...S.marques, D.marque].filter(Boolean))].map(m => opt(m, D.marque)).join('')}</select></label>
+      ${fld('Millésime', 'millesime', 'inputmode="numeric" placeholder="2023"')}
+      <label>Couleur / type<select data-f="couleur">${Object.keys(COUL).map(c => opt(c, D.couleur)).join('')}</select></label>
+      ${fld('Cépage(s)', 'cepage', '', 'full')}
+      <label>Prix pro HT (€ / bt)<input data-f="prixPro" data-num inputmode="decimal" value="${D.prixPro ?? ''}"></label>
+      <label class="full chk"><input type="checkbox" data-f="actif" ${D.actif !== false ? 'checked' : ''}> Encore disponible à la vente</label>
+      <label class="full">Notes<textarea data-f="com" rows="2">${esc(D.com || '')}</textarea></label>
+    </div>${used ? `<p class="muted small">Ce vin est utilisé par ${plural(used, 'table')}. Pour un millésime épuisé, décoche « Encore disponible » plutôt que de le supprimer : l'historique des commandes est conservé.</p>` : ''}</div>
+    <div class="m-foot">${!IS_NEW && !used ? '<button class="btn ghost danger" data-act="del-vin">Supprimer</button>' : ''}<span class="sp"></span><button class="btn" data-act="close">Annuler</button><button class="btn primary" data-act="save-vin">Enregistrer</button></div>`;
+  if (!dlg.open) dlg.showModal();
+  if (IS_NEW) setTimeout(() => $('#dlg [data-f=nom]')?.focus(), 50);
+}
+function saveVin() {
+  collect(); D.nom = (D.nom || '').trim();
+  if (!D.nom) { toast('Indique le nom de la cuvée.'); return; }
+  const i = S.vins.findIndex(v => v.id === D.id);
+  if (i < 0) S.vins.push(D); else S.vins[i] = D;
+  touch(); dlg.close(); render(); toast('Vin enregistré.');
+}
+
+/* ───────── Paramètres ───────── */
+function openSettings(msg) {
+  MODE = 'settings';
+  const themeOk = !!TOKEN;
+  $('#dlgIn').innerHTML = `<div class="m-head"><h2>Paramètres</h2><button class="btn ghost icon-btn" data-act="close" aria-label="Fermer">✕</button></div>
+    <div class="m-body">${msg ? `<div class="banner" style="margin:0 0 14px">${esc(msg)}</div>` : ''}<div class="form">
+      <h5>Le domaine</h5>
+      <label class="full">Nom affiché<input id="sNom" value="${esc(S.domaine.nom || '')}"></label>
+      <label class="full">Sous-titre<input id="sSub" value="${esc(S.domaine.sousTitre || '')}" placeholder="Les tables qui servent nos vins"></label>
+      <label class="full">Marques (séparées par des virgules)<input id="sMq" value="${esc(S.marques.join(', '))}"></label>
+      <label>Alerte « sans commande » après<span style="display:flex;gap:6px;align-items:center"><input id="sRel" type="number" min="7" value="${+CFG.relance || 90}" style="width:90px"> jours</span></label>
+      <h5>Publication sur GitHub</h5>
+      <label>Compte GitHub<input id="sOwner" value="${esc(CFG.owner)}" placeholder="identifiant"></label>
+      <label>Dépôt<input id="sRepo" value="${esc(CFG.repo)}" placeholder="nom-du-depot"></label>
+      <label>Branche<input id="sBranch" value="${esc(CFG.branch)}"></label>
+      <label>Fichier<input id="sPath" value="${esc(CFG.path)}"></label>
+      <label class="full">Jeton d'accès (fine-grained, droit « Contents : read & write » sur ce dépôt)<input id="sTok" type="password" value="${esc(TOKEN)}" placeholder="github_pat_…" autocomplete="off"></label>
+      <p class="full muted small" style="margin:0">Le jeton reste dans ce navigateur uniquement. Sans jeton, tu peux tout consulter et modifier sur cet appareil, mais pas publier.${themeOk ? '' : ''}</p>
+      <h5>Données</h5>
+      <div class="full" style="display:flex;gap:8px;flex-wrap:wrap">${S._demo ? '<button class="btn sm" data-act="clear-demo">Effacer les tables d\'exemple</button>' : ''}<button class="btn sm danger" data-act="reset-local">Abandonner les modifications non publiées</button></div>
+    </div></div>
+    <div class="m-foot"><span class="sp"></span><button class="btn" data-act="close">Annuler</button><button class="btn primary" data-act="save-settings">Enregistrer</button></div>`;
+  if (!dlg.open) dlg.showModal();
+}
+function saveSettings() {
+  const nom = $('#sNom').value.trim(), sub = $('#sSub').value.trim();
+  const mqs = [...new Set($('#sMq').value.split(',').map(s => s.trim()).filter(Boolean))];
+  if (nom !== (S.domaine.nom || '') || sub !== (S.domaine.sousTitre || '') || (mqs.length && mqs.join('|') !== S.marques.join('|'))) { S.domaine.nom = nom || 'Maison Meyer'; S.domaine.sousTitre = sub; if (mqs.length) S.marques = mqs; touch(); }
+  CFG = Object.assign(CFG, {owner: $('#sOwner').value.trim(), repo: $('#sRepo').value.trim(), branch: $('#sBranch').value.trim() || 'main', path: $('#sPath').value.trim() || 'index.html', relance: Math.max(7, +$('#sRel').value || 90)});
+  lsSet(LS_CFG, JSON.stringify(CFG));
+  TOKEN = $('#sTok').value.trim();
+  if (TOKEN) lsSet(LS_TOKEN, TOKEN); else lsDel(LS_TOKEN);
+  dlg.close(); render(); toast('Paramètres enregistrés.');
+}
+
+/* ───────── Publication GitHub ───────── */
+function b64dec(b64) { const bin = atob(b64.replace(/\s/g, '')); const bytes = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i); return new TextDecoder().decode(bytes); }
+function b64enc(str) { const bytes = new TextEncoder().encode(str); let bin = ''; for (let i = 0; i < bytes.length; i += 8192) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 8192)); return btoa(bin); }
+const safeJSON = o => JSON.stringify(o).replace(/<\//g, '<\\/').replace(/\*\//g, '*\\/');
+async function publish() {
+  if (!isDirty()) { toast('Tout est déjà en ligne.'); return; }
+  if (!CFG.owner || !CFG.repo) { openSettings('Indique le compte et le dépôt GitHub pour publier.'); return; }
+  if (!TOKEN) { openSettings('Ajoute un jeton GitHub pour publier.'); return; }
+  PUBBING = true; updatePub();
+  try {
+    const url = `https://api.github.com/repos/${encodeURIComponent(CFG.owner)}/${encodeURIComponent(CFG.repo)}/contents/${CFG.path.split('/').map(encodeURIComponent).join('/')}`;
+    const h = {Authorization: 'Bearer ' + TOKEN, Accept: 'application/vnd.github+json'};
+    const g = await fetch(url + '?ref=' + encodeURIComponent(CFG.branch) + '&t=' + Date.now(), {headers: h, cache: 'no-store'});
+    if (!g.ok) throw new Error(g.status === 401 ? 'jeton refusé' : g.status === 404 ? 'dépôt ou fichier introuvable' : 'lecture impossible (' + g.status + ')');
+    const j = await g.json();
+    const html = b64dec(j.content);
+    const m = html.match(RE_DATA);
+    if (!m) throw new Error('marqueur de données introuvable dans le fichier en ligne');
+    let remote = {}; try { remote = JSON.parse(m[1]); } catch (e) {}
+    if ((remote._ts || 0) > PUB_TS && remote._ts !== S._ts) {
+      if (!confirm('La version en ligne a été modifiée depuis un autre appareil après ta dernière publication.\n\nPublier quand même et remplacer cette version ?')) { PUBBING = false; updatePub(); return; }
+    }
+    const out = html.replace(RE_DATA, () => MK1 + safeJSON(S) + MK2);
+    const p = await fetch(url, {method: 'PUT', headers: h, body: JSON.stringify({message: 'Mise à jour des tables — ' + new Date().toLocaleString('fr-FR'), content: b64enc(out), sha: j.sha, branch: CFG.branch})});
+    if (!p.ok) throw new Error(p.status === 409 ? 'conflit, réessaie dans un instant' : 'écriture refusée (' + p.status + ')');
+    PUB_TS = S._ts; lsSet(LS_PUB, String(PUB_TS));
+    toast('Publié ✓ — le site en ligne sera à jour d\'ici une minute.', 3500);
+  } catch (e) {
+    toast('Publication impossible : ' + e.message, 5000);
+  }
+  PUBBING = false; updatePub();
+}
+
+/* ───────── Exports / imports ───────── */
+function download(content, name, type) { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([content], {type})); a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500); }
+function exportCSV() {
+  const head = ['Nom', 'Statut', 'Type', 'Distinction', 'Adresse', 'CP', 'Commune', 'Interlocuteur', 'Téléphone', 'E-mail', 'Marques', 'Vins à la carte', 'Bouteilles 12 mois', 'Bouteilles total', 'Dernière commande', 'Prochaine relance', 'Notes'];
+  const rows = S.restos.map(r => [r.nom, (STATUTS[r.statut] || {}).l, r.type, r.distinction, r.adresse, r.cp, r.commune, r.contact, r.tel, r.email,
+    [...new Set(r.refs.map(x => vinById(x.vin)?.marque).filter(Boolean))].join(', '), r.refs.map(x => vinLabel(vinById(x.vin)) + (x.prixCarte ? ` (${x.prixCarte} €)` : '')).join(' | '), bottles(r, 365), bottles(r), lastOrder(r) || '', r.relance, r.com]);
+  const csv = '\ufeff' + [head, ...rows].map(r => r.map(c => '"' + String(c ?? '').replace(/"/g, '""') + '"').join(';')).join('\r\n');
+  download(csv, `tables-${today()}.csv`, 'text/csv;charset=utf-8');
+}
+function importFile(file) {
+  if (!file) return;
+  const rd = new FileReader();
+  rd.onload = () => {
+    try {
+      const d = JSON.parse(rd.result);
+      if (!Array.isArray(d.restos) || !Array.isArray(d.vins)) throw 0;
+      if (!confirm(`Remplacer les données actuelles par cette sauvegarde (${plural(d.restos.length, 'table')}, ${plural(d.vins.length, 'vin')}) ?`)) return;
+      S = d; normalize(); touch(); render(); toast('Sauvegarde restaurée. Pense à publier.');
+    } catch (e) { toast('Ce fichier n\'est pas une sauvegarde valide.'); }
+  };
+  rd.readAsText(file);
+}
+
+/* ───────── Thème ───────── */
+function applyTheme() {
+  const t = lsGet(LS_THEME) || 'auto';
+  if (t === 'auto') document.documentElement.removeAttribute('data-theme'); else document.documentElement.dataset.theme = t;
+  $('#themeLbl').textContent = {auto: 'automatique', light: 'clair', dark: 'sombre'}[t];
+}
+
+/* ───────── Événements ───────── */
+const closeMenu = () => { $('#menu').hidden = true; };
+document.addEventListener('click', e => {
+  const tab = e.target.closest('nav.tabs [data-tab]');
+  if (tab) { TAB = tab.dataset.tab; lsSet(LS_TAB, TAB); closeMenu(); render(); return; }
+  const el = e.target.closest('[data-act]');
+  if (!el) { if (!e.target.closest('.menu-wrap')) closeMenu(); return; }
+  const a = el.dataset.act, id = el.dataset.id;
+  if (el.tagName === 'A') e.preventDefault();
+  if (a !== 'menu') closeMenu();
+  switch (a) {
+    case 'menu': $('#menu').hidden = !$('#menu').hidden; break;
+    case 'publish': publish(); break;
+    case 'close': dlg.close(); break;
+    case 'new-resto': openResto(null); break;
+    case 'open-resto': openResto(id, el.dataset.tab); break;
+    case 'sub': if (DT === 'infos') collect(); DT = el.dataset.t; renderRM(); break;
+    case 'save-resto': saveResto(); break;
+    case 'del-resto':
+      if (confirm(`Supprimer « ${D.nom || 'cette table'} » et tout son historique ?`)) { S.restos = S.restos.filter(r => r.id !== D.id); touch(); dlg.close(); render(); toast('Table supprimée.'); }
+      break;
+    case 'add-ref': {
+      const free = S.vins.find(v => v.actif !== false && !D.refs.some(x => x.vin === v.id)) || S.vins[0];
+      D.refs.push({vin: free.id, prixCarte: null, verre: false}); renderRM(); break;
+    }
+    case 'del-ref': D.refs.splice(+el.dataset.i, 1); renderRM(); break;
+    case 'add-cmd': {
+      const qte = parseInt($('#cQte').value, 10), vin = $('#cVin').value, date = $('#cDate').value || today();
+      if (!vin) { toast('Ajoute d\'abord un vin au catalogue.'); break; }
+      if (!(qte > 0)) { toast('Indique le nombre de bouteilles.'); $('#cQte').focus(); break; }
+      D.cmds.push({id: uid(), date, vin, qte, com: $('#cCom').value.trim()});
+      const notes = [];
+      if (!D.refs.some(x => x.vin === vin)) { D.refs.push({vin, prixCarte: null, verre: false}); notes.push('vin ajouté à la carte'); }
+      if (D.statut === 'prospect') { D.statut = 'actif'; notes.push('passée en client actif'); }
+      renderRM(); toast('Commande ajoutée' + (notes.length ? ' · ' + notes.join(', ') : '') + '.'); break;
+    }
+    case 'del-cmd': D.cmds = D.cmds.filter(c => c.id !== id); renderRM(); break;
+    case 'add-jr': {
+      const txt = $('#jTxt').value.trim(), rel = $('#jRel').value;
+      if (!txt && rel === (D.relance || '')) { toast('Écris quelques mots sur l\'échange.'); break; }
+      if (txt) D.journal.push({id: uid(), date: $('#jDate').value || today(), txt});
+      D.relance = rel; renderRM(); break;
+    }
+    case 'del-jr': D.journal = D.journal.filter(j => j.id !== id); renderRM(); break;
+    case 'geocode-one': (async () => { collect(); toast('Recherche de l\'adresse…'); const p = await geocode(D); if (p) { [D.lat, D.lng] = p; renderRM(); toast('Position trouvée.'); } else toast('Adresse introuvable — vérifie la commune.'); })(); break;
+    case 'geocode-all': geocodeAll(); break;
+    case 'new-vin': openVin(null); break;
+    case 'edit-vin': openVin(id); break;
+    case 'save-vin': saveVin(); break;
+    case 'del-vin': if (confirm('Supprimer ce vin du catalogue ?')) { S.vins = S.vins.filter(v => v.id !== D.id); touch(); dlg.close(); render(); } break;
+    case 'settings': openSettings(); break;
+    case 'save-settings': saveSettings(); break;
+    case 'clear-demo':
+      if (confirm('Effacer les tables d\'exemple ? Les vins sont conservés.')) { S.restos = []; delete S._demo; touch(); if (dlg.open) dlg.close(); render(); toast('Tables d\'exemple effacées. À vous de jouer !'); }
+      break;
+    case 'reset-local':
+      if (confirm('Revenir à la version publiée et perdre les modifications faites sur cet appareil depuis ?')) { lsDel(LS_DATA); loadState(); dlg.close(); render(); toast('Version publiée rechargée.'); }
+      break;
+    case 'export-csv': exportCSV(); break;
+    case 'export-json': download(JSON.stringify(S, null, 2), `sauvegarde-tables-${today()}.json`, 'application/json'); break;
+    case 'import-json': $('#fileIn').value = ''; $('#fileIn').click(); break;
+    case 'theme': { const order = ['auto', 'light', 'dark']; const t = lsGet(LS_THEME) || 'auto'; lsSet(LS_THEME, order[(order.indexOf(t) + 1) % 3]); applyTheme(); break; }
+  }
+});
+function onRefEdit(t) {
+  if (t.dataset.ref === undefined || !D || MODE !== 'resto') return false;
+  const x = D.refs[+t.dataset.ref], k = t.dataset.k; if (!x) return true;
+  x[k] = t.type === 'checkbox' ? t.checked : k === 'prixCarte' ? numOrNull(t.value) : t.value;
+  return true;
+}
+document.addEventListener('input', e => {
+  const t = e.target;
+  if (t.id === 'q') { F.q = t.value; renderList(); return; }
+  if (MODE === 'resto' && t.dataset.f === 'nom') { const h = $('#dlg .m-head h2'); if (h) h.textContent = t.value || 'Nouvelle table'; }
+  onRefEdit(t);
+});
+document.addEventListener('change', e => {
+  const t = e.target, map = {fSt: 'statut', fTy: 'type', fMq: 'marque', fVin: 'vin', fSort: 'sort'};
+  if (map[t.id]) { F[map[t.id]] = t.value; renderList(); return; }
+  if (t.id === 'fileIn') { importFile(t.files[0]); return; }
+  onRefEdit(t);
+});
+dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); });
+dlg.addEventListener('close', () => { MODE = null; D = null; });
+document.addEventListener('keydown', e => {
+  if (e.key.toLowerCase() === 'n' && !e.metaKey && !e.ctrlKey && !e.altKey && !dlg.open && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) { e.preventDefault(); openResto(null); }
+});
+
+/* ───────── Démarrage ───────── */
+loadState(); applyTheme(); render();
+</script>
+</body>
+</html>
